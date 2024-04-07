@@ -1,0 +1,36 @@
+---
+import {Counter} from "../components/mithril/Counter.ts";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const pageTitle = "Astro + Mithril Test Page!";
+const counterProps = {
+    initCount: 0,
+    title: "Mithril Component"
+};
+const categories = ["category1", "category2", "category3", "category4", "category5"];
+---
+<style>
+    .child {
+        background: palegreen;
+        padding: 16px;
+    }
+</style>
+
+<BaseLayout pageTitle={pageTitle}>
+
+    <h1>{pageTitle}</h1>
+    <p>This line is from Astro</p>
+
+    <!-- mithril component -->
+    <Counter client:load {...counterProps}>
+        <p class="child">Child component from Astro!</p>
+    </Counter>
+
+    <h2>Category pages</h2>
+    {categories.map(category => {
+        return (
+                <li><a href=`/tags/${category}/`>Posts from {category}</a>
+                </li>);
+    })}
+
+</BaseLayout>

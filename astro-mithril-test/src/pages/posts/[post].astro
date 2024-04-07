@@ -1,0 +1,28 @@
+---
+import {MarkdownInstance} from "astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+export async function getStaticPaths() {
+    const allPosts = await Astro.glob("../../../../dummy-md/dummy-posts/*.md");
+    return allPosts.map(post => {
+        return {
+            // params.post is for URL
+            params: {
+                post: post.frontmatter.slug
+            },
+            // props is for the content
+            props: {
+                post
+            }
+        };
+    });
+}
+
+const post = Astro.props.post;
+const {Content} = post;
+const pageTitle = post.frontmatter.title;
+---
+<BaseLayout pageTitle={pageTitle}>
+
+    <Content/>
+
+</BaseLayout>

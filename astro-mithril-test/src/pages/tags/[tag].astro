@@ -1,0 +1,33 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+    const allPosts = await Astro.glob("../../../../dummy-md/dummy-posts/*.md");
+    return [
+        {params: {tag: "category1"}, props: {posts: allPosts}},
+        {params: {tag: "category2"}, props: {posts: allPosts}},
+        {params: {tag: "category3"}, props: {posts: allPosts}},
+        {params: {tag: "category4"}, props: {posts: allPosts}},
+        {params: {tag: "category5"}, props: {posts: allPosts}},
+    ];
+}
+
+const {tag} = Astro.params;
+const pageTitle = `Posts from ${tag}`;
+const {posts} = Astro.props;
+const filteredPosts = posts
+    .filter(post => post.frontmatter.category?.includes(tag))
+    .sort((a, b) => a.frontmatter.title.length - b.frontmatter.title.length);
+---
+<BaseLayout pageTitle={pageTitle}>
+    <h2>{pageTitle}</h2>
+    <ul>
+        {filteredPosts.map(post => {
+            return (
+                    <li>
+                        <a href={`/posts/${post.frontmatter.slug}`}>{post.frontmatter.title}</a>
+                    </li>);
+        })}
+    </ul>
+
+</BaseLayout>
